@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wanderlust</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .image-box {
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 3px;
+    }
+    .author-profile img {
+      object-fit: cover;
+  }
+  .author-username p {
+      margin-bottom: 0;
+      font-size: 1rem;
+  }
+  i{
+    color: blue;
+  }
+  
+  </style>
+</head>  
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <% layout('/layouts/boilerplate') -%>
+        <h3 class="text-center my-4 mt-3"><%= listing.title %></h3>
+        <div class="card mb-3">
+          <div class="image-box">
+            <img src="<%= listing.image.url %>" alt="<%= listing.image.filename %>" class="img-fluid">
+          </div>
+           <span>owned by:<i> <%= listing.owner.username %></i></span>
+          <div class="card-body">
+            <p class="card-text">
+              <%= listing.description %><br>
+              &#8377; <%= listing.price.toLocaleString("en-IN") %><br>
+              <%= listing.location %><br>
+              <%= listing.country %>
+            </p>
+            <% if (currUser && currUser._id.equals(listing.owner._id)) { %>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit</a>
+              <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="m-0">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-5">
+    <h2>Submit Your Review</h2>
+    <form method="post" action="/listings/<%= listing._id %>/reviews">
+      <div class="form-group">
+        <label for="rating">Rating</label>
+        <input type="range" class="form-control-range" id="rating" min="1" max="5" name="reviews[rating]">
+        <div class="d-flex justify-content-between">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="comments">Comments</label>
+        <textarea class="form-control" id="comments" rows="3" placeholder="Enter your comments" name="reviews[comment]"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+  </div>
+  <div class="container">
+    <h3 class="my-4">Reviews</h3>
+    <div class="row">
+        <% for (let review of listing.reviews) { %>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="author-profile">
+                                <img src="https://wallpaperaccess.com/full/1672449.jpg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                            </div>
+                            <div class="author-username ml-3">
+                                <p class="mb-0"><strong><%= review.author.username %></strong></p>
+                            </div>
+                        </div>
+                        <h5 class="card-title">Rating: <%= review.rating %>/5</h5>
+                        <p class="card-text"><%= review.comment %></p>
+                        <form method="post" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <%= new Date(review.created_At).toDateString() %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+  
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

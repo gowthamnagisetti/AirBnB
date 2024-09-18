@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WanderLust</title>
+  <!-- Bootstrap CSS -->
+  <link 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+      rel="stylesheet"
+  >
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+    .card-body {
+      flex: 1 1 auto;
+    }
+    .card-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .row a{
+      text-decoration: none;
+    }
+    .row img:hover{
+      opacity: 0.6;
+    }
+    a{
+      text-decoration: none !important;
+    }
+  </style>
+</head>
+<body>
+  <% layout('/layouts/boilerplate') -%>
+  <div class="container">
+    <h3>All Listings</h3>
+    <div class="row">
+      <% for(let listing of allListings) { %>
+      <div class="col-md-4 col-sm-6 mb-4">
+        <a href="/listings/<%= listing._id %>">
+          <div class="card h-100">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.image.filename %>">
+            <div class="card-body">
+              <p class="card-text">
+                <b><%= listing.title %>
+                <br>&#8377;<%= listing.price %>/Night</b>
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
